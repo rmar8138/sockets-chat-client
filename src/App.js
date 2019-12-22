@@ -3,11 +3,13 @@ import axios from "axios";
 import socketIOClient from "socket.io-client";
 import Form from "./components/Form";
 import Messages from "./components/Messages";
+import NameForm from "./components/NameForm";
 
 let socket = null;
 
 export class App extends Component {
   state = {
+    name: undefined,
     endpoint: "http://127.0.0.1:5000",
     messages: []
   };
@@ -30,16 +32,23 @@ export class App extends Component {
   }
 
   sendMessage = body => {
-    socket.emit("sendMessage", { body });
+    const { name } = this.state;
+    socket.emit("sendMessage", { body, name });
+  };
+
+  setName = name => {
+    this.setState(() => ({ name }));
   };
 
   render() {
-    return (
+    return this.state.name ? (
       <div>
         <h1>Hello world!</h1>
         <Form sendMessage={this.sendMessage} />
         <Messages messages={this.state.messages} />
       </div>
+    ) : (
+      <NameForm setName={this.setName} />
     );
   }
 }
