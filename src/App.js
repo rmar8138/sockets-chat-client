@@ -23,7 +23,9 @@ export class App extends Component {
     socket = socketIOClient(endpoint);
     socket.emit("message", "hello from the client side!");
     socket.on("renderMessage", data => {
-      console.log(data);
+      this.setState(prevState => ({
+        messages: prevState.messages.concat(data)
+      }));
     });
   }
 
