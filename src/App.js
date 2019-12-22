@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import socketIOClient from "socket.io-client";
+import Form from "./components/Form";
 
 export class App extends Component {
   state = {
@@ -13,10 +14,15 @@ export class App extends Component {
     socket.emit("message", "hello from the client side!");
   }
 
+  sendMessage = body => {
+    console.log(body);
+  };
+
   render() {
     return (
       <div>
         <h1>Hello world!</h1>
+        <Form sendMessage={this.sendMessage} />
       </div>
     );
   }
