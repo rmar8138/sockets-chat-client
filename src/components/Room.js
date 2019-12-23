@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import axios from "axios";
 import socketIOClient from "socket.io-client";
 import Form from "./Form";
@@ -14,15 +15,18 @@ export class Room extends Component {
 
   async componentDidMount() {
     const { name, room } = this.props.location.state;
+    // if (!name || !room) {
+    //   this.props.history.push("/");
+    // }
     // get messages from db and set to state
-    const response = await axios.get(`${this.state.endpoint}`);
+    const response = await axios.get(`${this.state.endpoint}/room/${room}`);
     const { data: messages } = response;
     this.setState(() => ({ messages }));
 
     // start socket connection
     const { endpoint } = this.state;
     socket = socketIOClient(endpoint);
-    socket.emit("message", "hello from the client side!");
+    socket.emit("joinRoom", room);
     socket.on("renderMessage", data => {
       this.setState(prevState => ({
         messages: prevState.messages.concat(data)
@@ -31,17 +35,19 @@ export class Room extends Component {
   }
 
   sendMessage = body => {
-    const { name } = this.state;
-    socket.emit("sendMessage", { body, name });
+    const { name, room } = this.props.location.state;
+    socket.emit("sendMessage", { body, name, room });
   };
 
   render() {
-    return (
+    return this.props.location.state.name && this.props.location.state.room ? (
       <div>
         <h1>Hello world!</h1>
         <Form sendMessage={this.sendMessage} />
         <Messages messages={this.state.messages} />
       </div>
+    ) : (
+      <Redirect to="/" />
     );
   }
 }
