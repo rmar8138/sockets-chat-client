@@ -1,15 +1,10 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 class UserForm extends Component {
   state = {
     name: "",
     room: ""
-  };
-
-  handleFormSubmit = e => {
-    const { name, room } = this.state;
-    e.preventDefault();
-    this.props.sendNameAndRoomData(name, room);
   };
 
   handleInputChange = e => {
@@ -33,9 +28,17 @@ class UserForm extends Component {
             <label>Room</label>
             <input type="text" name="room" onChange={this.handleInputChange} />
           </div>
-          <div>
-            <input type="submit" value="Enter" />
-          </div>
+          <Link
+            to={{
+              pathname: `/room/${this.state.room}`,
+              state: {
+                name: this.state.name,
+                room: this.state.room
+              }
+            }}
+          >
+            Enter
+          </Link>
         </form>
       </div>
     );

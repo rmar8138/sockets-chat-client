@@ -6,13 +6,14 @@ import Messages from "./Messages";
 
 let socket = null;
 
-export class Roon extends Component {
+export class Room extends Component {
   state = {
     endpoint: "http://127.0.0.1:5000",
     messages: []
   };
 
   async componentDidMount() {
+    const { name, room } = this.props.location.state;
     // get messages from db and set to state
     const response = await axios.get(`${this.state.endpoint}`);
     const { data: messages } = response;
@@ -45,4 +46,4 @@ export class Roon extends Component {
   }
 }
 
-export default Roon;
+export default Room;
