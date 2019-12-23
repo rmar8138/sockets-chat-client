@@ -40,9 +40,11 @@ export class Room extends Component {
   };
 
   render() {
-    return this.props.location.state.name && this.props.location.state.room ? (
+    const { name, room } = this.props.location.state;
+    return name && room ? (
       <div>
-        <h1>Hello world!</h1>
+        <h1>{room}</h1>
+        <h2>Welcome, {name}</h2>
         <Form sendMessage={this.sendMessage} />
         <Messages messages={this.state.messages} />
       </div>
